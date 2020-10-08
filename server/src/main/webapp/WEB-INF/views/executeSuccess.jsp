@@ -10,7 +10,7 @@
 <div class="container">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h1 align="center">抢购成功-请您<span style="color: red">登录邮箱</span>验证相关链接信息,并请在<span style="color: red">1小时内</span>完成订单的支付!</h1>
+            <h2 align="center">抢购成功-请您<span style="color: red"><a href="https://mail.qq.com/">登录邮箱</a></span>验证相关链接信息,并请在<span style="color: red">1小时内</span>完成订单的支付!</h2>
         </div>
     </div>
 </div>

@@ -12,8 +12,10 @@ public interface ItemKillSuccessMapper {
 
     int insert(ItemKillSuccess record);
 
+    // 秒杀成功表插入一条信息
     int insertSelective(ItemKillSuccess record);
 
+    // 主键查询秒杀成功的信息
     ItemKillSuccess selectByPrimaryKey(String code);
 
     int updateByPrimaryKeySelective(ItemKillSuccess record);
@@ -29,6 +31,6 @@ public interface ItemKillSuccessMapper {
     // 失效更新订单信息
     int expireOrder(@Param("code") String code);
 
-    // 批量获取待处理的已保存订单记录
+    // 批量获取秒杀成功未付款的订单信息
     List<ItemKillSuccess> selectExpireOrders();
 }

@@ -1,6 +1,4 @@
-package com.shui.server.config;/**
- * Created by Administrator on 2019/7/2.
- */
+package com.shui.server.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,10 +10,8 @@ import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * redis的通用配置
- * @Author:debug (SteadyJack)
- * @Date: 2019/7/2 10:17
- **/
+ *  redis的通用配置
+ */
 @Configuration
 public class RedisConfig {
 
@@ -24,9 +20,9 @@ public class RedisConfig {
 
     @Bean
     public RedisTemplate<String,Object> redisTemplate(){
-        RedisTemplate<String,Object> redisTemplate=new RedisTemplate<>();
+        RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
-        //TODO:指定Key、Value的序列化策略
+        // 指定Key、Value的序列化策略
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
 
@@ -36,7 +32,7 @@ public class RedisConfig {
 
     @Bean
     public StringRedisTemplate stringRedisTemplate(){
-        StringRedisTemplate stringRedisTemplate=new StringRedisTemplate();
+        StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
         stringRedisTemplate.setConnectionFactory(redisConnectionFactory);
         return stringRedisTemplate;
     }

@@ -1,6 +1,4 @@
-package com.shui.server.config;/**
- * Created by Administrator on 2019/7/2.
- */
+package com.shui.server.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -11,10 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 /**
- * redisson通用化配置
- * @Author:debug (SteadyJack)
- * @Date: 2019/7/2 10:57
- **/
+ *  redisson通用化配置
+ */
 @Configuration
 public class RedissonConfig {
 
@@ -23,11 +19,11 @@ public class RedissonConfig {
 
     @Bean
     public RedissonClient redissonClient(){
-        Config config=new Config();
+        Config config = new Config();
         config.useSingleServer()
                 .setAddress(env.getProperty("redis.config.host"))
                 .setPassword(env.getProperty("spring.redis.password"));
-        RedissonClient client=Redisson.create(config);
+        RedissonClient client = Redisson.create(config);
         return client;
     }
 

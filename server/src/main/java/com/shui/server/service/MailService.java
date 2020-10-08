@@ -41,7 +41,7 @@ public class MailService {
 
             mailSender.send(message);
             log.info("发送简单文本文件-发送成功!");
-            
+
         }catch (Exception e){
             log.error("发送简单文本文件-发生异常： ",e.fillInStackTrace());
         }
@@ -53,8 +53,8 @@ public class MailService {
     @Async
     public void sendHTMLMail(final MailDto dto){
         try {
-            MimeMessage message=mailSender.createMimeMessage();
-            MimeMessageHelper messageHelper=new MimeMessageHelper(message,true,"utf-8");
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message,true,"utf-8");
             messageHelper.setFrom(env.getProperty("mail.send.from"));
             messageHelper.setTo(dto.getTos());
             messageHelper.setSubject(dto.getSubject());
@@ -63,7 +63,7 @@ public class MailService {
             mailSender.send(message);
             log.info("发送花哨邮件-发送成功!");
         }catch (Exception e){
-            log.error("发送花哨邮件-发生异常：",e.fillInStackTrace());
+            log.error("发送花哨邮件-发生异常：", e.fillInStackTrace());
         }
     }
 }

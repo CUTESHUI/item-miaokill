@@ -23,7 +23,7 @@ public class ZooKeeperConfig {
      */
     @Bean
     public CuratorFramework curatorFramework(){
-        CuratorFramework curatorFramework=CuratorFrameworkFactory.builder()
+        CuratorFramework curatorFramework = CuratorFrameworkFactory.builder()
                 .connectString(env.getProperty("zk.host"))
                 .namespace(env.getProperty("zk.namespace"))
                 //重试策略

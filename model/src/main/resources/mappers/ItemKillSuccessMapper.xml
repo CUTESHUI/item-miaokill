@@ -10,10 +10,12 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
 
+  <!--秒杀成功表的列名-->
   <sql id="Base_Column_List" >
     code, item_id, kill_id, user_id, status, create_time
   </sql>
 
+  <!--主键查询秒杀成功的信息-->
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
@@ -145,7 +147,7 @@
     WHERE code = #{code} AND status = 0
   </update>
 
-  <!--批量获取待处理的已保存订单记录-->
+  <!--批量获取秒杀成功未付款的订单信息-->
   <select id="selectExpireOrders" resultType="com.shui.model.entity.ItemKillSuccess">
     SELECT
         a.*,TIMESTAMPDIFF(MINUTE,a.create_time,NOW()) AS diffTime

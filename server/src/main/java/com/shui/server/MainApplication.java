@@ -6,10 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @ImportResource(value = {"classpath:spring/spring-jdbc.xml"})
 @MapperScan(basePackages = "com.shui.model.mapper")
+@EnableScheduling
 public class MainApplication extends SpringBootServletInitializer {
 
     @Override

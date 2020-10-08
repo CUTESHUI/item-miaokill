@@ -39,9 +39,9 @@ public class CustomRealm extends AuthorizingRealm{
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        UsernamePasswordToken token= (UsernamePasswordToken) authenticationToken;
-        String userName=token.getUsername();
-        String password=String.valueOf(token.getPassword());
+        UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
+        String userName = token.getUsername();
+        String password = String.valueOf(token.getPassword());
         log.info("当前登录的用户名={} 密码={} ",userName,password);
 
         User user=userMapper.selectByUserName(userName);

@@ -40,8 +40,8 @@ public class RabbitSenderService {
      *  异步发送邮件通知消息
      *  orderNo：订单编号
      */
-    public void sendKillSuccessEmailMsg(String orderNo){
-        log.info("秒杀成功异步发送邮件通知消息-准备发送消息：{}",orderNo);
+    public void  sendKillSuccessEmailMsg(String orderNo){
+        log.info("秒杀成功异步发送邮件通知消息-准备发送消息：{}", orderNo);
 
         try {
             if (StringUtils.isNotBlank(orderNo)){
@@ -51,21 +51,21 @@ public class RabbitSenderService {
                     rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
                     rabbitTemplate.setExchange(env.getProperty("mq.kill.item.success.email.exchange"));
                     rabbitTemplate.setRoutingKey(env.getProperty("mq.kill.item.success.email.routing.key"));
-                    // 将info充当消息发送至队列
+                    // 将info充当message发送至队列，实际队列里是info
                     rabbitTemplate.convertAndSend(info, new MessagePostProcessor() {
                         @Override
                         public Message postProcessMessage(Message message) throws AmqpException {
-                            MessageProperties messageProperties=message.getMessageProperties();
+                            MessageProperties messageProperties = message.getMessageProperties();
                             // 保证消息可靠，设置持久化
                             messageProperties.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
-                            messageProperties.setHeader(AbstractJavaTypeMapper.DEFAULT_CONTENT_CLASSID_FIELD_NAME,KillSuccessUserInfo.class);
+                            messageProperties.setHeader(AbstractJavaTypeMapper.DEFAULT_CONTENT_CLASSID_FIELD_NAME, KillSuccessUserInfo.class);
                             return message;
                         }
                     });
                 }
             }
         } catch (Exception e){
-            log.error("秒杀成功异步发送邮件通知消息-发生异常，消息为：{}",orderNo,e.fillInStackTrace());
+            log.error("秒杀成功异步发送邮件通知消息-发生异常，消息为：{}", orderNo, e.fillInStackTrace());
         }
     }
 
@@ -84,18 +84,18 @@ public class RabbitSenderService {
                     rabbitTemplate.convertAndSend(info, new MessagePostProcessor() {
                         @Override
                         public Message postProcessMessage(Message message) throws AmqpException {
-                            MessageProperties mp=message.getMessageProperties();
-                            mp.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
-                            mp.setHeader(AbstractJavaTypeMapper.DEFAULT_CONTENT_CLASSID_FIELD_NAME,KillSuccessUserInfo.class);
-                            // 动态设置TTL(为了测试方便，暂且设置10s)
-                            mp.setExpiration(env.getProperty("mq.kill.item.success.kill.expire"));
+                            MessageProperties messageProperties = message.getMessageProperties();
+                            messageProperties.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+                            messageProperties.setHeader(AbstractJavaTypeMapper.DEFAULT_CONTENT_CLASSID_FIELD_NAME, KillSuccessUserInfo.class);
+                            // 动态设置TTL
+                            messageProperties.setExpiration(env.getProperty("mq.kill.item.success.kill.expire"));
                             return message;
                         }
                     });
                 }
             }
         } catch (Exception e){
-            log.error("秒杀成功后生成抢购订单-发送信息入死信队列，等待着一定时间失效超时未支付的订单-发生异常，消息为：{}",orderCode,e.fillInStackTrace());
+            log.error("秒杀成功后生成抢购订单-发送信息入死信队列，等待着一定时间失效超时未支付的订单-发生异常，消息为：{}", orderCode, e.fillInStackTrace());
         }
     }
 

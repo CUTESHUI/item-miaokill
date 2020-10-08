@@ -66,9 +66,9 @@ public class KillServiceImpl implements KillService {
             ItemKill itemKill = itemKillMapper.selectById(killId);
             // 判断是否可以被秒杀
             if (itemKill != null && 1 == itemKill.getCanKill() ){
-                // 扣减库存-减一
+                // 扣减库存，减一
                 int res = itemKillMapper.updateKillItem(killId);
-                // 扣减是否成功? 是-生成秒杀成功的订单，同时通知用户秒杀成功的消息
+                // 扣减成功：生成秒杀成功的订单，同时通知用户秒杀成功的消息
                 if (res > 0){
                     commonRecordKillSuccessInfo(itemKill,userId);
                     result = true;
@@ -97,7 +97,7 @@ public class KillServiceImpl implements KillService {
         entity.setUserId(userId.toString());
         entity.setStatus(SysConstant.OrderStatus.SuccessNotPayed.getCode().byteValue());
         entity.setCreateTime(DateTime.now().toDate());
-        // 学以致用，举一反三 -> 仿照单例模式的双重检验锁写法
+        // 更新秒杀成功的表
         if (itemKillSuccessMapper.countByKillUserId(kill.getId(), userId) <= 0){
             int res = itemKillSuccessMapper.insertSelective(entity);
             if (res > 0){
@@ -127,7 +127,7 @@ public class KillServiceImpl implements KillService {
                 // B.扣减库存-减一
                 int res=itemKillMapper.updateKillItemV2(killId);
                 // 扣减是否成功? 是-生成秒杀成功的订单，同时通知用户秒杀成功的消息
-                if (res>0){
+                if (res > 0){
                     commonRecordKillSuccessInfo(itemKill,userId);
                     result=true;
                 }
@@ -195,7 +195,7 @@ public class KillServiceImpl implements KillService {
         try {
             Boolean cacheRes=lock.tryLock(30,10,TimeUnit.SECONDS);
             if (cacheRes){
-                //TODO:核心业务逻辑的处理
+                // 核心业务逻辑的处理
                 if (itemKillSuccessMapper.countByKillUserId(killId,userId) <= 0){
                     ItemKill itemKill=itemKillMapper.selectByIdV2(killId);
                     if (itemKill!=null && 1==itemKill.getCanKill() && itemKill.getTotal()>0){
@@ -228,11 +228,10 @@ public class KillServiceImpl implements KillService {
         InterProcessMutex mutex=new InterProcessMutex(curatorFramework,pathPrefix+killId+userId+"-lock");
         try {
             if (mutex.acquire(10L,TimeUnit.SECONDS)){
-
                 // 核心业务逻辑
                 if (itemKillSuccessMapper.countByKillUserId(killId,userId) <= 0){
                     ItemKill itemKill=itemKillMapper.selectByIdV2(killId);
-                    if (itemKill!=null && 1==itemKill.getCanKill() && itemKill.getTotal()>0){
+                    if (itemKill != null && 1 == itemKill.getCanKill() && itemKill.getTotal()>0){
                         int res=itemKillMapper.updateKillItemV2(killId);
                         if (res>0){
                             commonRecordKillSuccessInfo(itemKill,userId);
