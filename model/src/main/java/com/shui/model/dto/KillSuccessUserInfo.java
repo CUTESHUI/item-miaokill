@@ -9,11 +9,8 @@ import java.io.Serializable;
 public class KillSuccessUserInfo extends ItemKillSuccess implements Serializable{
 
     private String userName;
-
     private String phone;
-
     private String email;
-
     private String itemName;
 
     @Override

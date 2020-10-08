@@ -98,7 +98,7 @@ public class KillServiceImpl implements KillService {
         entity.setStatus(SysConstant.OrderStatus.SuccessNotPayed.getCode().byteValue());
         entity.setCreateTime(DateTime.now().toDate());
         // 学以致用，举一反三 -> 仿照单例模式的双重检验锁写法
-        if (itemKillSuccessMapper.countByKillUserId(kill.getId(),userId) <= 0){
+        if (itemKillSuccessMapper.countByKillUserId(kill.getId(), userId) <= 0){
             int res = itemKillSuccessMapper.insertSelective(entity);
             if (res > 0){
                 // 进行异步邮件消息的通知 = rabbitmq+mail
@@ -126,11 +126,9 @@ public class KillServiceImpl implements KillService {
             if (itemKill != null && 1 == itemKill.getCanKill() && itemKill.getTotal() > 0){
                 // B.扣减库存-减一
                 int res=itemKillMapper.updateKillItemV2(killId);
-
                 // 扣减是否成功? 是-生成秒杀成功的订单，同时通知用户秒杀成功的消息
                 if (res>0){
                     commonRecordKillSuccessInfo(itemKill,userId);
-
                     result=true;
                 }
             }

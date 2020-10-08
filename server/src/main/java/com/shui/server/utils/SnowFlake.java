@@ -2,6 +2,9 @@ package com.shui.server.utils;
 
 /**
  *  雪花算法
+ *  整体上按照时间自增排序
+ *  整个分布式系统内不会产生ID碰撞，高效率
+ *  官方 十万数据 五秒
  */
 public class SnowFlake {
 
@@ -86,6 +89,8 @@ public class SnowFlake {
         return System.currentTimeMillis();
     }
 
+
+//    //总共耗时：3027
 //    public static void main(String[] args) {
 //        SnowFlake snowFlake = new SnowFlake(2, 3);
 //

@@ -8,6 +8,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *  随机数生成util
+ *  for循环生成，量大的时候还是慢
+ *  没法排序
  */
 public class RandomUtil {
 

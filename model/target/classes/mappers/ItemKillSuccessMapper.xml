@@ -120,7 +120,6 @@
     WHERE
         user_id = #{userId}
     AND kill_id = #{killId}
-    <!-- AND `status` IN (-1, 0) -->
     AND `status` IN (0)
   </select>
 

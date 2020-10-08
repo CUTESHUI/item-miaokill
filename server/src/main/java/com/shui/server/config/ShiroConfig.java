@@ -30,12 +30,12 @@ public class ShiroConfig {
 
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(){
-        ShiroFilterFactoryBean bean=new ShiroFilterFactoryBean();
+        ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
         bean.setSecurityManager(securityManager());
         bean.setLoginUrl("/to/login");
         bean.setUnauthorizedUrl("/unauth");
 
-        Map<String, String> filterChainDefinitionMap=new HashMap<>();
+        Map<String, String> filterChainDefinitionMap = new HashMap<>();
         filterChainDefinitionMap.put("/to/login","anon");
 
         filterChainDefinitionMap.put("/**","anon");

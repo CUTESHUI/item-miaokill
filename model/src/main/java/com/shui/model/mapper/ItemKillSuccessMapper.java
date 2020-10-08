@@ -23,9 +23,12 @@ public interface ItemKillSuccessMapper {
     // 根据秒杀活动跟用户Id，查询用户的抢购数量
     int countByKillUserId(@Param("killId") Integer killId, @Param("userId") Integer userId);
 
+    // 根据秒杀成功后的订单编码查询
     KillSuccessUserInfo selectByCode(@Param("code") String code);
 
+    // 失效更新订单信息
     int expireOrder(@Param("code") String code);
 
+    // 批量获取待处理的已保存订单记录
     List<ItemKillSuccess> selectExpireOrders();
 }

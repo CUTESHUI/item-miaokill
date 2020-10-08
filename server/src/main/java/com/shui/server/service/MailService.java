@@ -21,10 +21,10 @@ public class MailService {
     private static final Logger log= LoggerFactory.getLogger(MailService.class);
 
     @Autowired
-    private JavaMailSender mailSender;
+    JavaMailSender mailSender;
 
     @Autowired
-    private Environment env;
+    Environment env;
 
 
     /**
@@ -38,9 +38,10 @@ public class MailService {
             message.setTo(dto.getTos());
             message.setSubject(dto.getSubject());
             message.setText(dto.getContent());
-            mailSender.send(message);
 
+            mailSender.send(message);
             log.info("发送简单文本文件-发送成功!");
+            
         }catch (Exception e){
             log.error("发送简单文本文件-发生异常： ",e.fillInStackTrace());
         }

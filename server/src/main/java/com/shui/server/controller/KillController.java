@@ -57,7 +57,7 @@ public class KillController {
                 return new BaseResponse(StatusCode.Fail.getCode(),"商品已抢购完毕！！或者不在抢购时间段！!");
             }
         }catch (Exception e){
-            response=new BaseResponse(StatusCode.Fail.getCode(),e.getMessage());
+            response=new BaseResponse(StatusCode.Fail.getCode(), e.getMessage());
         }
         return response;
     }
@@ -74,29 +74,29 @@ public class KillController {
         }
         BaseResponse response = new BaseResponse(StatusCode.Success);
         try {
-            //不加分布式锁的前提
+            // 不加分布式锁的前提
             /*Boolean res=killService.killItemV2(dto.getKillId(),dto.getUserId());
             if (!res){
                 return new BaseResponse(StatusCode.Fail.getCode(),"不加分布式锁-哈哈~商品已抢购完毕或者不在抢购时间段哦!");
             }*/
 
-            //基于Redis的分布式锁进行控制
-            /*Boolean res=killService.killItemV3(dto.getKillId(),dto.getUserId());
-            if (!res){
-                return new BaseResponse(StatusCode.Fail.getCode(),"基于Redis的分布式锁进行控制-哈哈~商品已抢购完毕或者不在抢购时间段哦!");
-            }*/
+            // 基于Redis的分布式锁进行控制
+//            Boolean res=killService.killItemV3(dto.getKillId(),dto.getUserId());
+//            if (!res){
+//                return new BaseResponse(StatusCode.Fail.getCode(),"基于Redis的分布式锁进行控制-哈哈~商品已抢购完毕或者不在抢购时间段哦!");
+//            }
 
-            //基于Redisson的分布式锁进行控制
+            // 基于Redisson的分布式锁进行控制
             /*Boolean res=killService.killItemV4(dto.getKillId(),dto.getUserId());
             if (!res){
                 return new BaseResponse(StatusCode.Fail.getCode(),"基于Redisson的分布式锁进行控制-哈哈~商品已抢购完毕或者不在抢购时间段哦!");
             }*/
 
-            //基于ZooKeeper的分布式锁进行控制
-            Boolean res = killService.killItemV5(dto.getKillId(),dto.getUserId());
-            if (!res){
-                return new BaseResponse(StatusCode.Fail.getCode(),"基于ZooKeeper的分布式锁进行控制-哈哈~商品已抢购完毕或者不在抢购时间段哦!");
-            }
+            // 基于ZooKeeper的分布式锁进行控制
+//            Boolean res = killService.killItemV5(dto.getKillId(),dto.getUserId());
+//            if (!res){
+//                return new BaseResponse(StatusCode.Fail.getCode(),"基于ZooKeeper的分布式锁进行控制-哈哈~商品已抢购完毕或者不在抢购时间段哦!");
+//            }
 
         }catch (Exception e){
             response = new BaseResponse(StatusCode.Fail.getCode(),e.getMessage());
@@ -104,12 +104,10 @@ public class KillController {
         return response;
     }
 
-    //http://localhost:8083/kill/kill/record/detail/343147116421722112
-
     /**
      *  查看订单详情
      */
-    @RequestMapping(value = prefix+"/record/detail/{orderNo}",method = RequestMethod.GET)
+    @GetMapping(prefix+"/record/detail/{orderNo}")
     public String killRecordDetail(@PathVariable String orderNo, ModelMap modelMap){
         if (StringUtils.isBlank(orderNo)){
             return "error";
@@ -123,56 +121,16 @@ public class KillController {
     }
 
 
-    //抢购成功跳转页面
-    @RequestMapping(value = prefix+"/execute/success",method = RequestMethod.GET)
+    // 抢购成功跳转页面
+    @GetMapping(prefix+"/execute/success")
     public String executeSuccess(){
         return "executeSuccess";
     }
 
-    //抢购失败跳转页面
-    @RequestMapping(value = prefix+"/execute/fail",method = RequestMethod.GET)
+    // 抢购失败跳转页面
+    @GetMapping(prefix+"/execute/fail")
     public String executeFail(){
         return "executeFail";
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

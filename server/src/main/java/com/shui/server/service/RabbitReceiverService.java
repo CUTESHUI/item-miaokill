@@ -30,19 +30,16 @@ public class RabbitReceiverService {
 
 
     /**
-     *  秒杀异步邮件通知-接收消息
+     *  秒杀成功
+     *  异步接收邮件通知
      */
     @RabbitListener(queues = {"${mq.kill.item.success.email.queue}"},containerFactory = "singleListenerContainer")
     public void consumeEmailMsg(KillSuccessUserInfo info){
         try {
             log.info("秒杀异步邮件通知-接收消息:{}",info);
 
-            // 真正的发送邮件....
-            // MailDto dto=new MailDto(env.getProperty("mail.kill.item.success.subject"),"这是测试内容",new String[]{info.getEmail()});
-            // mailService.sendSimpleEmail(dto);
-
-            final String content = String.format(env.getProperty("mail.kill.item.success.content"),info.getItemName(),info.getCode());
-            MailDto dto = new MailDto(env.getProperty("mail.kill.item.success.subject"),content,new String[]{info.getEmail()});
+            final String content = String.format(env.getProperty("mail.kill.item.success.content"), info.getItemName(), info.getCode());
+            MailDto dto = new MailDto(env.getProperty("mail.kill.item.success.subject"), content, new String[]{info.getEmail()});
             mailService.sendHTMLMail(dto);
 
         }catch (Exception e){
@@ -51,8 +48,8 @@ public class RabbitReceiverService {
     }
 
     /**
-     * 用户秒杀成功后超时未支付-监听者
-     * @param info
+     *  用户秒杀成功后超时未支付
+     *  监听者
      */
     @RabbitListener(queues = {"${mq.kill.item.success.kill.dead.real.queue}"},containerFactory = "singleListenerContainer")
     public void consumeExpireOrder(KillSuccessUserInfo info){
