@@ -37,32 +37,38 @@ public class UserController {
 
     /**
      * 登录认证
+     * 通用
      */
     @PostMapping("/login")
     public String login(@RequestParam String userName, @RequestParam String password, ModelMap modelMap){
         String errorMsg="";
         try {
+            // 认证不通过做登录
             if (!SecurityUtils.getSubject().isAuthenticated()){
-                String newPsd = new Md5Hash(password,env.getProperty("shiro.encrypt.password.salt")).toString();
-                UsernamePasswordToken token = new UsernamePasswordToken(userName,newPsd);
-                SecurityUtils.getSubject().login(token);
+                String newPsd = new Md5Hash(password, env.getProperty("shiro.encrypt.password.salt")).toString();
+                UsernamePasswordToken token = new UsernamePasswordToken(userName, newPsd);
+                SecurityUtils.getSubject().login(token); // login(AuthenticationToken var1)
             }
-        }catch (UnknownAccountException e){
+        } catch (UnknownAccountException e){
             errorMsg = e.getMessage();
             modelMap.addAttribute("userName",userName);
-        }catch (DisabledAccountException e){
+
+        } catch (DisabledAccountException e){
             errorMsg = e.getMessage();
             modelMap.addAttribute("userName",userName);
-        }catch (IncorrectCredentialsException e){
+
+        } catch (IncorrectCredentialsException e){
             errorMsg = e.getMessage();
             modelMap.addAttribute("userName",userName);
-        }catch (Exception e){
+
+        } catch (Exception e){
             errorMsg = "用户登录异常，请联系管理员!";
             e.printStackTrace();
         }
+        // 没有错误，登录认证成功
         if (StringUtils.isBlank(errorMsg)){
             return "redirect:/index";
-        }else{
+        } else{
             modelMap.addAttribute("errorMsg",errorMsg);
             return "login";
         }

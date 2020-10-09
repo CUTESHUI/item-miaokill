@@ -51,7 +51,7 @@ public class MailService {
      *  发送花哨邮件
      */
     @Async
-    public void sendHTMLMail(final MailDto dto){
+    public void sendHtmlMail(final MailDto dto){
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper messageHelper = new MimeMessageHelper(message,true,"utf-8");

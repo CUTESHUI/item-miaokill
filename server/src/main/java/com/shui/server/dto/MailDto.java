@@ -14,7 +14,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class MailDto implements Serializable{
 
-    private String subject; //邮件主题
-    private String content; //邮件内容
-    private String[] tos;   //接收人
+    // 邮件主题
+    private String subject;
+    // 邮件内容
+    private String content;
+    // 接收人
+    private String[] tos;
 }

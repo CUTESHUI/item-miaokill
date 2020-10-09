@@ -25,7 +25,7 @@ public class KillController {
 
     private static final Logger log = LoggerFactory.getLogger(KillController.class);
 
-    private static final String prefix = "kill";
+    private static final String PREFIX = "kill";
 
     @Autowired
     KillService killService;
@@ -36,7 +36,7 @@ public class KillController {
     /**
      *  商品秒杀核心业务逻辑
      */
-    @RequestMapping(value = prefix+"/execute",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = PREFIX+"/execute",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public BaseResponse execute(@RequestBody @Validated KillDto dto, BindingResult result, HttpSession session){
         BaseResponse response = new BaseResponse(StatusCode.Success);
@@ -66,7 +66,7 @@ public class KillController {
     /**
      *  查看订单详情
      */
-    @GetMapping(prefix+"/record/detail/{orderNo}")
+    @GetMapping(PREFIX+"/record/detail/{orderNo}")
     public String killRecordDetail(@PathVariable String orderNo, ModelMap modelMap){
         if (StringUtils.isBlank(orderNo)){
             return "error";
@@ -81,13 +81,13 @@ public class KillController {
 
 
     // 抢购成功跳转页面
-    @GetMapping(prefix+"/execute/success")
+    @GetMapping(PREFIX+"/execute/success")
     public String executeSuccess(){
         return "executeSuccess";
     }
 
     // 抢购失败跳转页面
-    @GetMapping(prefix+"/execute/fail")
+    @GetMapping(PREFIX+"/execute/fail")
     public String executeFail(){
         return "executeFail";
     }
@@ -97,7 +97,7 @@ public class KillController {
      *  商品秒杀核心业务逻辑
      *  用于压力测试
      */
-    @RequestMapping(value = prefix+"/execute/lock", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = PREFIX+"/execute/lock", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public BaseResponse executeLock(@RequestBody @Validated KillDto dto, BindingResult result){
         if (result.hasErrors() || dto.getKillId() <= 0){

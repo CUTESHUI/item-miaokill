@@ -7,9 +7,13 @@ public class SysConstant {
 
     public enum OrderStatus{
 
+        // 无效
         Invalid(-1,"无效"),
+        // 成功未付款
         SuccessNotPayed(0,"成功-未付款"),
+        // 已付款
         HasPayed(1,"已付款"),
+        // 已取消
         Cancel(2,"已取消"),
 
         ;

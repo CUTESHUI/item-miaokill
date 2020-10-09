@@ -5,8 +5,10 @@ package com.shui.kill.api.enums;
  */
 public enum StatusCode {
 
+    // item_kill_success status
     Success(0,"成功"),
     Fail(-1,"失败"),
+
     InvalidParams(201,"非法的参数!"),
     UserNotLogin(202,"用户没登录"),
     ;

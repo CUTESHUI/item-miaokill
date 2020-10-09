@@ -9,9 +9,12 @@ import lombok.Data;
 @Data
 public class BaseResponse<T> {
 
-    private Integer code;   // 状态码
-    private String msg;     // 消息
-    private T data;         // 返回前端的数据
+    // 状态码
+    private Integer code;
+    // 消息
+    private String msg;
+    // 返回前端的数据
+    private T data;
 
     public BaseResponse(Integer code, String msg) {
         this.code = code;

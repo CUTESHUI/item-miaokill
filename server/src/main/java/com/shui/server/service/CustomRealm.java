@@ -15,13 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Objects;
 
 /**
- *  用户自定义的realm-用于shiro的认证、授权
+ *  用户自定义的realm
+ *  用于shiro的认证、授权
  */
 public class CustomRealm extends AuthorizingRealm{
 
     private static final Logger log= LoggerFactory.getLogger(CustomRealm.class);
 
-    private static final Long sessionKeyTimeOut=3600_000L;
+    private static final Long SESSION_KEY_TIMEOUT = 3600_000L;
 
     @Autowired
     UserMapper userMapper;
@@ -36,26 +37,29 @@ public class CustomRealm extends AuthorizingRealm{
 
     /**
      *  认证-登录
+     *  1、拿到controller中得到token (UsernamePasswordToken)
+     *  2、交给Realm的doGetAuthenticationInfo，处理具体认证逻辑
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String userName = token.getUsername();
         String password = String.valueOf(token.getPassword());
-        log.info("当前登录的用户名={} 密码={} ",userName,password);
+        log.info("当前登录的用户名={} 密码={} ", userName, password);
 
-        User user=userMapper.selectByUserName(userName);
-        if (user==null){
+        // 具体逻辑
+        User user = userMapper.selectByUserName(userName);
+        if (user == null){
             throw new UnknownAccountException("用户名不存在!");
         }
-        if (!Objects.equals(1,user.getIsActive().intValue())){
+        if (!Objects.equals(1, user.getIsActive().intValue())) {
             throw new DisabledAccountException("当前用户已被禁用!");
         }
         if (!user.getPassword().equals(password)){
             throw new IncorrectCredentialsException("用户名密码不匹配!");
         }
 
-        SimpleAuthenticationInfo info=new SimpleAuthenticationInfo(user.getUserName(),password,getName());
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getUserName(),password,getName());
         setSession("uid",user.getId());
         return info;
     }
@@ -66,10 +70,10 @@ public class CustomRealm extends AuthorizingRealm{
      *  (如果是分布式session配置，那么就是交给redis管理)
      */
     private void setSession(String key,Object value){
-        Session session=SecurityUtils.getSubject().getSession();
-        if (session!=null){
-            session.setAttribute(key,value);
-            session.setTimeout(sessionKeyTimeOut);
+        Session session = SecurityUtils.getSubject().getSession();
+        if (session != null){
+            session.setAttribute(key, value);
+            session.setTimeout(SESSION_KEY_TIMEOUT);
         }
     }
 }

@@ -33,9 +33,10 @@ public class ShiroConfig {
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
         bean.setSecurityManager(securityManager());
         bean.setLoginUrl("/to/login");
+        // 未授权的
         bean.setUnauthorizedUrl("/unauth");
 
-        Map<String, String> filterChainDefinitionMap = new HashMap<>();
+        Map<String, String> filterChainDefinitionMap = new HashMap<>(16);
         filterChainDefinitionMap.put("/to/login","anon");
 
         filterChainDefinitionMap.put("/**","anon");

@@ -39,8 +39,8 @@ public class RabbitReceiverService {
             log.info("秒杀异步邮件通知-接收消息:{}", info);
 
             final String content = String.format(env.getProperty("mail.kill.item.success.content"), info.getItemName(), info.getCode());
-            MailDto dto = new MailDto(env.getProperty("mail.kill.item.success.subject"), content, new String[]{info.getEmail()});
-            mailService.sendHTMLMail(dto);
+            MailDto mailDto = new MailDto(env.getProperty("mail.kill.item.success.subject"), content, new String[]{info.getEmail()});
+            mailService.sendHtmlMail(mailDto);
 
         }catch (Exception e){
             log.error("秒杀异步邮件通知-接收消息-发生异常：", e.fillInStackTrace());

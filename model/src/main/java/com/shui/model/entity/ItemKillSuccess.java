@@ -15,5 +15,6 @@ public class ItemKillSuccess {
     private String userId;
     private Byte status;
     private Date createTime;
-    private Integer diffTime;   // 当前时间与下单时间之差
+    // 当前时间与下单时间之差
+    private Integer diffTime;
 }

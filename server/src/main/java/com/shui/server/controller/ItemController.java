@@ -17,7 +17,7 @@ public class ItemController {
 
     private static final Logger log = LoggerFactory.getLogger(ItemController.class);
 
-    private static final String prefix = "item";
+    private static final String PREFIX = "item";
 
     @Autowired
     ItemService itemService;
@@ -25,7 +25,7 @@ public class ItemController {
     /**
      *  秒杀商品列表
      */
-    @GetMapping({"/", "/index", prefix+"/index", prefix+"/list"})
+    @GetMapping({"/", "/index", PREFIX+"/index", PREFIX+"/list"})
     public String list(ModelMap modelMap) {
         try {
             // 获取秒杀商品列表
@@ -42,7 +42,7 @@ public class ItemController {
     /**
      *  秒杀商品详情
      */
-    @GetMapping(prefix+"/detail/{id}")
+    @GetMapping(PREFIX+"/detail/{id}")
     public String detail(@PathVariable("id") Integer id, ModelMap modelMap) {
         if (id == null || id <= 0){
             return "redirect:/base/error";

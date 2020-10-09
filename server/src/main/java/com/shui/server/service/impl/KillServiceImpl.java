@@ -28,7 +28,7 @@ public class KillServiceImpl implements KillService {
 
     private static final Logger log= LoggerFactory.getLogger(KillService.class);
     // 分布式锁，唯一锁，只需要一条路径
-    private static final String pathPrefix = "/kill/zkLock/";
+    private static final String PATHPREFIX = "/kill/zkLock/";
 
     private SnowFlake snowFlake = new SnowFlake(2,3);
 
@@ -54,6 +54,7 @@ public class KillServiceImpl implements KillService {
     /**
      *  商品秒杀核心业务逻辑的处理
      *  秒杀商品
+     *  killId = killItemId
      */
     @Override
     public Boolean killItem(Integer killId, Integer userId) throws Exception {
@@ -70,7 +71,7 @@ public class KillServiceImpl implements KillService {
                 int res = itemKillMapper.updateKillItem(killId);
                 // 扣减成功：生成秒杀成功的订单，同时通知用户秒杀成功的消息
                 if (res > 0){
-                    commonRecordKillSuccessInfo(itemKill,userId);
+                    commonRecordKillSuccessInfo(itemKill, userId);
                     result = true;
                 }
             }
@@ -91,7 +92,9 @@ public class KillServiceImpl implements KillService {
         String orderNo = String.valueOf(snowFlake.nextId());
 
         //entity.setCode(RandomUtil.generateOrderCode());   //传统时间戳+N位随机数
-        entity.setCode(orderNo); //雪花算法
+
+        //雪花算法
+        entity.setCode(orderNo);
         entity.setItemId(kill.getItemId());
         entity.setKillId(kill.getId());
         entity.setUserId(userId.toString());
@@ -154,7 +157,8 @@ public class KillServiceImpl implements KillService {
             // 唯一key
             final String key = new StringBuffer().append(killId).append(userId).append("-RedisLock").toString();
             final String value = RandomUtil.generateOrderCode();
-            Boolean cacheRes = valueOperations.setIfAbsent(key,value); //luna脚本提供“分布式锁服务”，就可以写在一起
+            //luna脚本提供“分布式锁服务”，就可以写在一起
+            Boolean cacheRes = valueOperations.setIfAbsent(key,value);
             // redis部署节点宕机了
             if (cacheRes){
                 stringRedisTemplate.expire(key,30, TimeUnit.SECONDS);
@@ -192,7 +196,7 @@ public class KillServiceImpl implements KillService {
         Boolean result = false;
 
         // 唯一key
-        final String lockKey = new StringBuffer().append(killId).append(userId).append("-RedissonLock").toString();
+        final String lockKey = String.valueOf(killId) + userId + "-RedissonLock";
         RLock lock = redissonClient.getLock(lockKey);
 
         try {
@@ -216,7 +220,6 @@ public class KillServiceImpl implements KillService {
             }
         } finally {
             lock.unlock();
-            //lock.forceUnlock();
         }
         return result;
     }
@@ -231,7 +234,7 @@ public class KillServiceImpl implements KillService {
 
         // 唯一锁
         // 在路径上不断创建临时节点序号，哪个节点序号最小，就获得锁
-        InterProcessMutex mutex = new InterProcessMutex(curatorFramework,pathPrefix+killId+userId+"-lock");
+        InterProcessMutex mutex = new InterProcessMutex(curatorFramework,PATHPREFIX+killId+userId+"-lock");
         try {
             // 尝试等待10秒
             if (mutex.acquire(10L,TimeUnit.SECONDS)){
