@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class UserController {
 
-    private static final Logger log= LoggerFactory.getLogger(UserController.class);
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private Environment env;
@@ -48,16 +48,16 @@ public class UserController {
                 SecurityUtils.getSubject().login(token);
             }
         }catch (UnknownAccountException e){
-            errorMsg=e.getMessage();
+            errorMsg = e.getMessage();
             modelMap.addAttribute("userName",userName);
         }catch (DisabledAccountException e){
-            errorMsg=e.getMessage();
+            errorMsg = e.getMessage();
             modelMap.addAttribute("userName",userName);
         }catch (IncorrectCredentialsException e){
-            errorMsg=e.getMessage();
+            errorMsg = e.getMessage();
             modelMap.addAttribute("userName",userName);
         }catch (Exception e){
-            errorMsg="用户登录异常，请联系管理员!";
+            errorMsg = "用户登录异常，请联系管理员!";
             e.printStackTrace();
         }
         if (StringUtils.isBlank(errorMsg)){

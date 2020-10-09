@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class KillServiceImpl implements KillService {
 
     private static final Logger log= LoggerFactory.getLogger(KillService.class);
-
+    // 分布式锁，唯一锁，只需要一条路径
     private static final String pathPrefix = "/kill/zkLock/";
 
     private SnowFlake snowFlake = new SnowFlake(2,3);
@@ -97,7 +97,7 @@ public class KillServiceImpl implements KillService {
         entity.setUserId(userId.toString());
         entity.setStatus(SysConstant.OrderStatus.SuccessNotPayed.getCode().byteValue());
         entity.setCreateTime(DateTime.now().toDate());
-        // 更新秒杀成功的表
+        // 更新数据库-秒杀成功的表
         if (itemKillSuccessMapper.countByKillUserId(kill.getId(), userId) <= 0){
             int res = itemKillSuccessMapper.insertSelective(entity);
             if (res > 0){
@@ -132,7 +132,7 @@ public class KillServiceImpl implements KillService {
                     result=true;
                 }
             }
-        }else{
+        } else{
             throw new Exception("您已经抢购过该商品了!");
         }
         return result;
@@ -148,8 +148,10 @@ public class KillServiceImpl implements KillService {
 
         if (itemKillSuccessMapper.countByKillUserId(killId,userId) <= 0){
 
-            // 借助Redis的原子操作实现分布式锁-对共享操作-资源进行控制
-            ValueOperations valueOperations=stringRedisTemplate.opsForValue();
+            // 借助Redis的原子操作实现分布式锁
+            // 对共享操作资源进行控制
+            ValueOperations valueOperations = stringRedisTemplate.opsForValue();
+            // 唯一key
             final String key = new StringBuffer().append(killId).append(userId).append("-RedisLock").toString();
             final String value = RandomUtil.generateOrderCode();
             Boolean cacheRes = valueOperations.setIfAbsent(key,value); //luna脚本提供“分布式锁服务”，就可以写在一起
@@ -159,23 +161,23 @@ public class KillServiceImpl implements KillService {
 
                 try {
                     ItemKill itemKill=itemKillMapper.selectByIdV2(killId);
-                    if (itemKill!=null && 1==itemKill.getCanKill() && itemKill.getTotal()>0){
-                        int res=itemKillMapper.updateKillItemV2(killId);
-                        if (res>0){
+                    if (itemKill != null && 1 == itemKill.getCanKill() && itemKill.getTotal() > 0){
+                        int res = itemKillMapper.updateKillItemV2(killId);
+                        if (res > 0){
                             commonRecordKillSuccessInfo(itemKill,userId);
 
                             result=true;
                         }
                     }
-                }catch (Exception e){
+                } catch (Exception e){
                     throw new Exception("还没到抢购日期、已过了抢购时间或已被抢购完毕！");
-                }finally {
+                } finally {
                     if (value.equals(valueOperations.get(key).toString())){
                         stringRedisTemplate.delete(key);
                     }
                 }
             }
-        }else{
+        } else{
             throw new Exception("Redis-您已经抢购过该商品了!");
         }
         return result;
@@ -187,30 +189,32 @@ public class KillServiceImpl implements KillService {
      */
     @Override
     public Boolean killItemV4(Integer killId, Integer userId) throws Exception {
-        Boolean result=false;
+        Boolean result = false;
 
-        final String lockKey=new StringBuffer().append(killId).append(userId).append("-RedissonLock").toString();
-        RLock lock=redissonClient.getLock(lockKey);
+        // 唯一key
+        final String lockKey = new StringBuffer().append(killId).append(userId).append("-RedissonLock").toString();
+        RLock lock = redissonClient.getLock(lockKey);
 
         try {
-            Boolean cacheRes=lock.tryLock(30,10,TimeUnit.SECONDS);
+            // 尝试等待30秒，上锁10秒后自动解锁
+            Boolean cacheRes = lock.tryLock(30,10,TimeUnit.SECONDS);
             if (cacheRes){
                 // 核心业务逻辑的处理
                 if (itemKillSuccessMapper.countByKillUserId(killId,userId) <= 0){
-                    ItemKill itemKill=itemKillMapper.selectByIdV2(killId);
-                    if (itemKill!=null && 1==itemKill.getCanKill() && itemKill.getTotal()>0){
-                        int res=itemKillMapper.updateKillItemV2(killId);
-                        if (res>0){
+                    ItemKill itemKill = itemKillMapper.selectByIdV2(killId);
+                    if (itemKill != null && 1==itemKill.getCanKill() && itemKill.getTotal() > 0){
+                        int res = itemKillMapper.updateKillItemV2(killId);
+                        if (res > 0){
                             commonRecordKillSuccessInfo(itemKill,userId);
 
-                            result=true;
+                            result = true;
                         }
                     }
-                }else{
+                } else{
                     throw new Exception("redisson-您已经抢购过该商品了!");
                 }
             }
-        }finally {
+        } finally {
             lock.unlock();
             //lock.forceUnlock();
         }
@@ -223,28 +227,32 @@ public class KillServiceImpl implements KillService {
      */
     @Override
     public Boolean killItemV5(Integer killId, Integer userId) throws Exception {
-        Boolean result=false;
+        Boolean result = false;
 
-        InterProcessMutex mutex=new InterProcessMutex(curatorFramework,pathPrefix+killId+userId+"-lock");
+        // 唯一锁
+        // 在路径上不断创建临时节点序号，哪个节点序号最小，就获得锁
+        InterProcessMutex mutex = new InterProcessMutex(curatorFramework,pathPrefix+killId+userId+"-lock");
         try {
+            // 尝试等待10秒
             if (mutex.acquire(10L,TimeUnit.SECONDS)){
                 // 核心业务逻辑
                 if (itemKillSuccessMapper.countByKillUserId(killId,userId) <= 0){
-                    ItemKill itemKill=itemKillMapper.selectByIdV2(killId);
-                    if (itemKill != null && 1 == itemKill.getCanKill() && itemKill.getTotal()>0){
-                        int res=itemKillMapper.updateKillItemV2(killId);
-                        if (res>0){
+                    ItemKill itemKill = itemKillMapper.selectByIdV2(killId);
+                    if (itemKill != null && 1 == itemKill.getCanKill() && itemKill.getTotal() > 0){
+                        int res = itemKillMapper.updateKillItemV2(killId);
+                        if (res > 0){
                             commonRecordKillSuccessInfo(itemKill,userId);
-                            result=true;
+
+                            result = true;
                         }
                     }
-                }else{
+                } else{
                     throw new Exception("zookeeper-您已经抢购过该商品了!");
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e){
             throw new Exception("还没到抢购日期、已过了抢购时间或已被抢购完毕！");
-        }finally {
+        } finally {
             if (mutex != null){
                 mutex.release();
             }

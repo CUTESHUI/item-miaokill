@@ -26,7 +26,7 @@ public class ZooKeeperConfig {
         CuratorFramework curatorFramework = CuratorFrameworkFactory.builder()
                 .connectString(env.getProperty("zk.host"))
                 .namespace(env.getProperty("zk.namespace"))
-                //重试策略
+                //重试策略 5次，1秒
                 .retryPolicy(new RetryNTimes(5,1000))
                 .build();
         curatorFramework.start();
