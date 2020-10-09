@@ -37,8 +37,9 @@
     </div>
     <table>
         <tr>
-            <td><strong><input type="button" value="点击生成二维码进行支付" style="font-size: 30px;width: 1100px;height: auto;background-color: #28a4c9;"
-                               onclick="alert('扫码')"/></strong></td>
+            <td>
+                <a class="btn btn-info"  href="${ctx}/pay/${info.code}" target="_blank"><h4>点击进行支付</h4></a>
+            </td>
         </tr>
     </table>
 </div>

@@ -147,6 +147,12 @@
     WHERE code = #{code} AND status = 0
   </update>
 
+  <update id="updateStatusByCode">
+    UPDATE item_kill_success
+    SET status = 1
+    WHERE code = #{code} AND status = 0
+  </update>
+
   <!--批量获取秒杀成功未付款的订单信息-->
   <select id="selectExpireOrders" resultType="com.shui.model.entity.ItemKillSuccess">
     SELECT

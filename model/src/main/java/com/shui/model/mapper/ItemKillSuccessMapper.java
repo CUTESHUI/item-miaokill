@@ -33,4 +33,7 @@ public interface ItemKillSuccessMapper {
 
     // 批量获取秒杀成功未付款的订单信息
     List<ItemKillSuccess> selectExpireOrders();
+
+    // 支付成功更改status=1
+    int updateStatusByCode(@Param("code") String code);
 }

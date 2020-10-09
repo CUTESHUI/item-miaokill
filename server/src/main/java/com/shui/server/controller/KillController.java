@@ -92,6 +92,21 @@ public class KillController {
         return "executeFail";
     }
 
+    @GetMapping("/pay/{orderNo}")
+    public String pay(@PathVariable String orderNo, ModelMap modelMap) {
+        if (StringUtils.isBlank(orderNo)){
+            return "error";
+        }
+        KillSuccessUserInfo info = itemKillSuccessMapper.selectByCode(orderNo);
+        if (info == null){
+            return "error";
+        }
+        if (0 == info.getStatus()) {
+            int status = itemKillSuccessMapper.updateStatusByCode(orderNo);
+        }
+        modelMap.put("info", info);
+        return "pay";
+    }
 
     /**
      *  商品秒杀核心业务逻辑

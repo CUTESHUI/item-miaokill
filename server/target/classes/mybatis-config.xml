@@ -15,8 +15,10 @@
         This setting forces generated keys to be used if set to true,
          as some drivers deny compatibility but still work -->
         <setting name="useGeneratedKeys" value="true"/>
-        <!-- 设置控制台打印sql -->
+        <!-- 控制台打印sql -->
         <!--<setting name="logImpl" value="stdout_logging" />-->
+        <!-- 设置mybatis log plugin打印sql -->
+        <setting name="logImpl" value="org.apache.ibatis.logging.stdout.StdOutImpl"/>
     </settings>
 
     <!-- Continue going here -->

@@ -18,7 +18,7 @@ import javax.mail.internet.MimeMessage;
 @EnableAsync
 public class MailService {
 
-    private static final Logger log= LoggerFactory.getLogger(MailService.class);
+    private static final Logger log = LoggerFactory.getLogger(MailService.class);
 
     @Autowired
     JavaMailSender mailSender;
