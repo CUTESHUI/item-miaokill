@@ -53,7 +53,7 @@ public class KillController {
         try {
             // 秒杀商品，默认false
             Boolean res = killService.killItemV5(dto.getKillId(), userId);
-            // 如果成功true，不会进循环
+            // 如果失败
             if (!res){
                 return new BaseResponse(StatusCode.Fail.getCode(),"商品已抢购完毕！！或者不在抢购时间段！!");
             }
