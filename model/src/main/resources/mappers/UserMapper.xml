@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.shui.model.mapper.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.shui.model.entity.User" >
+<mapper namespace="com.shui.server.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.shui.entity.User" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
@@ -28,7 +28,7 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
-  <insert id="insert" parameterType="com.shui.model.entity.User" >
+  <insert id="insert" parameterType="com.shui.entity.User" >
     insert into user (id, user_name, password, 
       phone, email, is_active, 
       create_time, update_time)
@@ -37,7 +37,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
 
-  <insert id="insertSelective" parameterType="com.shui.model.entity.User" >
+  <insert id="insertSelective" parameterType="com.shui.entity.User" >
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -93,7 +93,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.shui.model.entity.User" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.shui.entity.User" >
     update user
     <set >
       <if test="userName != null" >
@@ -121,7 +121,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <update id="updateByPrimaryKey" parameterType="com.shui.model.entity.User" >
+  <update id="updateByPrimaryKey" parameterType="com.shui.entity.User" >
     update user
     set user_name = #{userName,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
@@ -134,14 +134,14 @@
   </update>
 
   <!--根据用户名查询-->
-  <select id="selectByUserName" resultType="com.shui.model.entity.User">
+  <select id="selectByUserName" resultType="com.shui.entity.User">
     SELECT <include refid="Base_Column_List"/>
     FROM user
     WHERE user_name = #{userName}
   </select>
 
   <!--根据用户名密码查询-->
-  <select id="selectByUserNamePsd" resultType="com.shui.model.entity.User">
+  <select id="selectByUserNamePsd" resultType="com.shui.entity.User">
     SELECT <include refid="Base_Column_List"/>
     FROM user
     WHERE user_name = #{userName}

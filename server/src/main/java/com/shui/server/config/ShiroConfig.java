@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *  shiro的通用化配置
+ * shiro的通用化配置
  */
 @Configuration
 public class ShiroConfig {

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 /**
- *  redisson通用化配置
+ * redisson通用化配置
  */
 @Configuration
 public class RedissonConfig {

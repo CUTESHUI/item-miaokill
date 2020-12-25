@@ -1,15 +1,14 @@
 package com.shui.server.service;
 
-import com.shui.model.entity.User;
-import com.shui.model.mapper.UserMapper;
+import com.shui.entity.User;
+import com.shui.server.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
@@ -18,14 +17,13 @@ import java.util.Objects;
  *  用户自定义的realm
  *  用于shiro的认证、授权
  */
+@Slf4j
 public class CustomRealm extends AuthorizingRealm{
-
-    private static final Logger log= LoggerFactory.getLogger(CustomRealm.class);
 
     private static final Long SESSION_KEY_TIMEOUT = 3600_000L;
 
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     /**
      *  授权

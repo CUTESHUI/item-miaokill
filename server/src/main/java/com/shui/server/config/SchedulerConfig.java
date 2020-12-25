@@ -10,7 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
- *  定时任务多线程处理的通用化配置
+ * 定时任务多线程处理的通用化配置
  */
 @Configuration
 public class SchedulerConfig implements SchedulingConfigurer{

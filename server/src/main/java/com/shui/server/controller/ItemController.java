@@ -1,9 +1,8 @@
 package com.shui.server.controller;
 
-import com.shui.model.entity.ItemKill;
+import com.shui.entity.ItemKill;
 import com.shui.server.service.ItemService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,15 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 public class ItemController {
-
-    private static final Logger log = LoggerFactory.getLogger(ItemController.class);
 
     private static final String PREFIX = "item";
 
     @Autowired
-    ItemService itemService;
+    private ItemService itemService;
 
     /**
      *  秒杀商品列表

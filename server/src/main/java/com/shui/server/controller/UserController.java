@@ -1,5 +1,6 @@
 package com.shui.server.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
@@ -7,28 +8,23 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.Md5Hash;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
+@Slf4j
 @Controller
 public class UserController {
-
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private Environment env;
 
     /**
-     *  跳到登录页
+     * 跳到登录页
      */
     @RequestMapping(value = {"/to/login","/unauth"})
     public String toLogin(){
@@ -36,8 +32,8 @@ public class UserController {
     }
 
     /**
-     *  登录认证
-     *  通用
+     * 登录认证
+     * 通用
      */
     @PostMapping("/login")
     public String login(@RequestParam String userName, @RequestParam String password, ModelMap modelMap){
@@ -76,7 +72,7 @@ public class UserController {
     }
 
     /**
-     *  退出登录
+     * 退出
      */
     @RequestMapping(value = "/logout")
     public String logout(){

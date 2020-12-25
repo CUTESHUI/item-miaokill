@@ -7,19 +7,21 @@ package com.shui.server.utils;
  *  官方 十万数据 五秒
  */
 public class SnowFlake {
-
-    // 起始的时间戳
-    private final static long START_STAMP = 1480166465631L;
-
     /**
-     *  每一部分占用的位数
+     * 起始的时间戳
      */
-
-    // 序列号占用的位数
+    private final static long START_STAMP = 1480166465631L;
+    /**
+     * 序列号占用的位数
+     */
     private final static long SEQUENCE_BIT = 12;
-    // 机器标识占用的位数
+    /**
+     * 机器标识占用的位数
+     */
     private final static long MACHINE_BIT = 5;
-    // 数据中心占用的位数
+    /**
+     * 数据中心占用的位数
+     */
     private final static long DATA_CENTER_BIT = 5;
 
     /**
@@ -57,7 +59,7 @@ public class SnowFlake {
     }
 
     /**
-     *  产生下一个ID
+     * 产生下一个ID
      */
     public synchronized long nextId() {
         long currStamp = getNewStamp();
@@ -97,16 +99,4 @@ public class SnowFlake {
         return System.currentTimeMillis();
     }
 
-
-//    //总共耗时：3027
-//    public static void main(String[] args) {
-//        SnowFlake snowFlake = new SnowFlake(2, 3);
-//
-//        long start = System.currentTimeMillis();
-//        for (int i = 0; i < 1000000; i++) {
-//            System.out.println("当前生成的有序数字串："+snowFlake.nextId());
-//        }
-//
-//        System.out.println("总共耗时："+(System.currentTimeMillis() - start));
-//    }
 }

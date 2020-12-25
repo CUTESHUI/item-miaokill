@@ -1,7 +1,7 @@
 package com.shui.server.service.impl;
 
-import com.shui.model.entity.ItemKill;
-import com.shui.model.mapper.ItemKillMapper;
+import com.shui.entity.ItemKill;
+import com.shui.server.mapper.ItemKillMapper;
 import com.shui.server.service.ItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

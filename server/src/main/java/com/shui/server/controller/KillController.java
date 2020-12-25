@@ -1,10 +1,10 @@
 package com.shui.server.controller;
 
-import com.shui.kill.api.enums.StatusCode;
-import com.shui.kill.api.response.BaseResponse;
-import com.shui.model.dto.KillSuccessUserInfo;
-import com.shui.model.mapper.ItemKillSuccessMapper;
-import com.shui.server.dto.KillDto;
+import com.shui.dto.KillSuccessUserInfo;
+import com.shui.enums.StatusCode;
+import com.shui.server.mapper.ItemKillSuccessMapper;
+import com.shui.dto.KillDto;
+import com.shui.response.BaseResponse;
 import com.shui.server.service.KillService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-
 @Controller
 public class KillController {
 
@@ -28,10 +27,9 @@ public class KillController {
     private static final String PREFIX = "kill";
 
     @Autowired
-    KillService killService;
-
+    private KillService killService;
     @Autowired
-    ItemKillSuccessMapper itemKillSuccessMapper;
+    private ItemKillSuccessMapper itemKillSuccessMapper;
 
     /**
      *  商品秒杀核心业务逻辑

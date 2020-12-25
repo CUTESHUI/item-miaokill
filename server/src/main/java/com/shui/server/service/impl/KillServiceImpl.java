@@ -1,21 +1,20 @@
 package com.shui.server.service.impl;
 
-import com.shui.model.entity.ItemKill;
-import com.shui.model.entity.ItemKillSuccess;
-import com.shui.model.mapper.ItemKillMapper;
-import com.shui.model.mapper.ItemKillSuccessMapper;
+import com.shui.entity.ItemKill;
+import com.shui.entity.ItemKillSuccess;
+import com.shui.server.mapper.ItemKillMapper;
+import com.shui.server.mapper.ItemKillSuccessMapper;
 import com.shui.server.enums.SysConstant;
 import com.shui.server.service.KillService;
 import com.shui.server.service.RabbitSenderService;
 import com.shui.server.utils.RandomUtil;
 import com.shui.server.utils.SnowFlake;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.joda.time.DateTime;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -23,33 +22,27 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 public class KillServiceImpl implements KillService {
 
-    private static final Logger log= LoggerFactory.getLogger(KillService.class);
     // 分布式锁，唯一锁，只需要一条路径
     private static final String PATHPREFIX = "/kill/zkLock/";
 
     private SnowFlake snowFlake = new SnowFlake(2,3);
 
     @Autowired
-    ItemKillSuccessMapper itemKillSuccessMapper;
-
+    private ItemKillSuccessMapper itemKillSuccessMapper;
     @Autowired
-    ItemKillMapper itemKillMapper;
-
+    private ItemKillMapper itemKillMapper;
     @Autowired
-    RedissonClient redissonClient;
-
+    private RedissonClient redissonClient;
     @Autowired
-    RabbitSenderService rabbitSenderService;
-
+    private RabbitSenderService rabbitSenderService;
     @Autowired
-    CuratorFramework curatorFramework;
-
+    private CuratorFramework curatorFramework;
     @Autowired
-    StringRedisTemplate stringRedisTemplate;
-
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      *  商品秒杀核心业务逻辑的处理

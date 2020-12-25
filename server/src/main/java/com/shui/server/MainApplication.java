@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @ImportResource(value = {"classpath:spring/spring-jdbc.xml"})
-@MapperScan(basePackages = "com.shui.model.mapper")
+@MapperScan(basePackages = "com.shui.server.mapper")
 @EnableScheduling
 public class MainApplication extends SpringBootServletInitializer {
 

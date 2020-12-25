@@ -9,14 +9,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 /**
- *  ZooKeeper组件自定义配置
+ * ZooKeeper组件自定义配置
  */
 @Configuration
 public class ZooKeeperConfig {
 
     @Autowired
     private Environment env;
-
 
     /**
      *  自定义注入ZooKeeper客户端操作实例

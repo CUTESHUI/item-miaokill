@@ -1,10 +1,9 @@
 package com.shui.server.service;
 
-import com.shui.model.dto.KillSuccessUserInfo;
-import com.shui.model.mapper.ItemKillSuccessMapper;
+import com.shui.dto.KillSuccessUserInfo;
+import com.shui.server.mapper.ItemKillSuccessMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageDeliveryMode;
@@ -20,25 +19,21 @@ import org.springframework.stereotype.Service;
 /**
  *  RabbitMQ发送消息服务
  */
+@Slf4j
 @Service
 public class RabbitSenderService {
 
-    public static final Logger log= LoggerFactory.getLogger(RabbitSenderService.class);
-
     @Autowired
-    RabbitTemplate rabbitTemplate;
-
+    private RabbitTemplate rabbitTemplate;
     @Autowired
-    Environment env;
-
+    private Environment env;
     @Autowired
-    ItemKillSuccessMapper itemKillSuccessMapper;
-
+    private ItemKillSuccessMapper itemKillSuccessMapper;
 
     /**
-     *  秒杀成功
-     *  异步发送邮件通知消息
-     *  orderNo：订单编号
+     * 秒杀成功
+     * 异步发送邮件通知消息
+     * orderNo：订单编号
      */
     public void  sendKillSuccessEmailMsg(String orderNo){
         log.info("秒杀成功异步发送邮件通知消息-准备发送消息：{}", orderNo);
@@ -71,7 +66,7 @@ public class RabbitSenderService {
 
 
     /**
-     *  秒杀成功后生成抢购订单-发送信息入死信队列，等待着一定时间失效超时未支付的订单
+     * 秒杀成功后生成抢购订单-发送信息入死信队列，等待着一定时间失效超时未支付的订单
      */
     public void sendKillSuccessOrderExpireMsg(final String orderCode){
         try {

@@ -1,37 +1,32 @@
 package com.shui.server.service;
 
-import com.shui.model.dto.KillSuccessUserInfo;
-import com.shui.model.entity.ItemKillSuccess;
-import com.shui.model.mapper.ItemKillSuccessMapper;
-import com.shui.server.dto.MailDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.shui.dto.KillSuccessUserInfo;
+import com.shui.entity.ItemKillSuccess;
+import com.shui.server.mapper.ItemKillSuccessMapper;
+import com.shui.dto.MailDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 /**
- *  RabbitMQ接收消息服务
+ * RabbitMQ接收消息服务
  */
+@Slf4j
 @Service
 public class RabbitReceiverService {
 
-    public static final Logger log= LoggerFactory.getLogger(RabbitReceiverService.class);
-
     @Autowired
-    MailService mailService;
-
+    private MailService mailService;
     @Autowired
-    Environment env;
-
+    private Environment env;
     @Autowired
-    ItemKillSuccessMapper itemKillSuccessMapper;
-
+    private ItemKillSuccessMapper itemKillSuccessMapper;
 
     /**
-     *  秒杀成功
-     *  异步接收邮件通知
+     * 秒杀成功
+     * 异步接收邮件通知
      */
     @RabbitListener(queues = {"${mq.kill.item.success.email.queue}"}, containerFactory = "singleListenerContainer")
     public void consumeEmailMsg(KillSuccessUserInfo info){
@@ -48,8 +43,8 @@ public class RabbitReceiverService {
     }
 
     /**
-     *  用户秒杀成功后超时未支付
-     *  监听者
+     * 用户秒杀成功后超时未支付
+     * 监听者
      */
     @RabbitListener(queues = {"${mq.kill.item.success.kill.dead.real.queue}"}, containerFactory = "singleListenerContainer")
     public void consumeExpireOrder(KillSuccessUserInfo info){

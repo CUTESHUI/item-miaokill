@@ -10,7 +10,7 @@ import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- *  redis的通用配置
+ * redis的通用配置
  */
 @Configuration
 public class RedisConfig {

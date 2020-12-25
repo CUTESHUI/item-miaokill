@@ -1,9 +1,8 @@
 package com.shui.server.service;
 
-import com.shui.model.entity.ItemKillSuccess;
-import com.shui.model.mapper.ItemKillSuccessMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.shui.entity.ItemKillSuccess;
+import com.shui.server.mapper.ItemKillSuccessMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,10 +14,9 @@ import java.util.List;
  *  定时任务服务
  *  缺点：这样会频繁扫描数据库，数据量大时压力山大
  */
+@Slf4j
 @Service
 public class SchedulerService {
-
-    private static final Logger log = LoggerFactory.getLogger(SchedulerService.class);
 
     @Autowired
     ItemKillSuccessMapper itemKillSuccessMapper;

@@ -10,7 +10,6 @@
     <version>1.0.1</version>
 
     <modules>
-        <module>api</module>
         <module>model</module>
         <module>server</module>
     </modules>

@@ -1,6 +1,7 @@
 package com.shui.server.config;
 
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
@@ -18,22 +19,18 @@ import org.springframework.core.env.Environment;
 import java.util.Map;
 
 /**
- *  通用化 Rabbitmq 配置
+ * 通用化 Rabbitmq 配置
  */
+@Slf4j
 @Configuration
 public class RabbitmqConfig {
 
-    private final static Logger log = LoggerFactory.getLogger(RabbitmqConfig.class);
-
     @Autowired
-    Environment env;
-
-    // kill 提供的服务要连到 RabbitMQ 提供的服务，需要一个通道来建立连接
+    private Environment env;
     @Autowired
-    CachingConnectionFactory connectionFactory;
-
+    private CachingConnectionFactory connectionFactory;
     @Autowired
-    SimpleRabbitListenerContainerFactoryConfigurer factoryConfigurer;
+    private SimpleRabbitListenerContainerFactoryConfigurer factoryConfigurer;
 
     /**
      *  单一消费者
